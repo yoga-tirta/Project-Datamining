@@ -1,3 +1,4 @@
-# streamlit
+# Streamlit
+## 200411100142 | Yoga Tirta Permana
 
-https://yoga-tirta-streamlit-streamlit-app-d3wk8b.streamlit.app/
+https://yoga-tirta-project-datamining-streamlit-app-ina62c.streamlit.app/
