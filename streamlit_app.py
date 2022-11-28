@@ -46,10 +46,10 @@ if(selected == "View Data"):
             - age: Umur dari pasien
             - gender: Jenis kelamin pasien
             - chest_pain: Tipe nyeri dada pasien
-                > 1 - typical angina
-                > 2 - atypical angina
-                > 3 - non-anginal pain
-                > 4 - asymtomatic
+                > 0 - typical angina
+                > 1 - atypical angina
+                > 2 - non-anginal pain
+                > 3 - asymtomatic
             - blood_pressure: Tekanan darah pasien (mm/Hg)
             - cholestoral: Kadar kolesterol pasien (mm/dl)
             - heart_rate: Detak jantung maximal pasien
@@ -79,14 +79,15 @@ elif(selected == 'Preprocessing'):
   data_asli, normalisasi = st.tabs(["View Data","Normalisasi"])
 
   with data_asli:
-      st.write('Data Sebelum Preprocessing')
-      st.dataframe(df_train)
+    st.write('Data Sebelum Preprocessing')
+    st.dataframe(df_train)
 
   with normalisasi:
-      st.write('Data Setelah Preprocessing dengan Min-Max Scaler')
-      scaler = MinMaxScaler()
-      df_train_pre = scaler.fit_transform(df_train.drop(columns=["output"]))
-      st.dataframe(df_train_pre)
+    st.write('Data Setelah Preprocessing dengan Min-Max Scaler')
+    st.write('Kecuali data gender, chest_pain, & output')
+    scaler = MinMaxScaler()
+    df_train_pre = scaler.fit_transform(df_train.drop(columns=['gender', 'chest_pain', 'output']))
+    st.dataframe(df_train_pre)
 
   # Save Scaled
   joblib.dump(df_train_pre, 'model/df_train_pre.sav')
@@ -148,7 +149,7 @@ elif(selected == 'Modelling'):
     
     dtc = DecisionTreeClassifier()
     dtc.fit(x_train, y_train)
-    
+
     # Save Model
     joblib.dump(dtc, 'model/dtc_model.sav') # Menyimpan Model ke dalam folder model
     
