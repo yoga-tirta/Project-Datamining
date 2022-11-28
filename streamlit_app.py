@@ -84,9 +84,10 @@ elif(selected == 'Preprocessing'):
 
   with normalisasi:
     st.write('Data Setelah Preprocessing dengan Min-Max Scaler')
-    st.write('Kecuali data gender, chest_pain, & output')
+    #st.write('Kecuali data gender, chest_pain, & output')
     scaler = MinMaxScaler()
-    df_train_pre = scaler.fit_transform(df_train.drop(columns=['gender', 'chest_pain', 'output']))
+    #df_train_pre = scaler.fit_transform(df_train.drop(columns=['gender', 'chest_pain', 'output']))
+    df_train_pre = scaler.fit_transform(df_train.drop(columns=['output']))
     st.dataframe(df_train_pre)
 
   # Save Scaled
