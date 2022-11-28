@@ -111,13 +111,14 @@ elif(selected == 'Modelling'):
         scores[i] = accuracy_score(y_test, y_pred)
         
     best_k = max(scores, key=scores.get)
-    st.info(f"K Terbaik : {best_k} berada di Index : {best_k-1}, Akurasi yang dihasilkan K-NN = {max(scores.values())* 100}%")
+    st.info(f"Akurasi yang dihasilkan K-NN = {max(scores.values())* 100}%")
+    st.info(f"K Terbaik : {best_k} berada di Index : {best_k-1}")
     st.write(df_train_pre)
     
     # Create Chart 
-    st.write('Dari proses pemodelan yang telah di lakukan menghasilkan grafik sebagai berikut')
+    st.write('Grafik Akurasi K')
     accuration_k = np.array(list(scores.values()))
-    chart_data = pd.DataFrame(accuration_k, columns=['Score Akurasi'])
+    chart_data = pd.DataFrame(accuration_k, columns=['Akurasi'])
     st.line_chart(chart_data)
     
     # Save Model
@@ -131,6 +132,7 @@ elif(selected == 'Modelling'):
     
     nb = GaussianNB()
     nb.fit(x_train, y_train)
+
     # Save Model
     joblib.dump(nb, 'model/nb_model.sav') # Menyimpan Model ke dalam folder model
     
@@ -146,6 +148,7 @@ elif(selected == 'Modelling'):
     
     dtc = DecisionTreeClassifier()
     dtc.fit(x_train, y_train)
+    
     # Save Model
     joblib.dump(dtc, 'model/dtc_model.sav') # Menyimpan Model ke dalam folder model
     
@@ -164,9 +167,9 @@ elif(selected == 'Implementation'):
   age = st.number_input("Masukkan Umur (29 - 77)", min_value=29, max_value=77)
   gender = st.number_input("Masukkan Jenis Kelamin (1 = Pria, 0 = Wanita)", min_value=0, max_value=1)
   chest_pain = st.number_input("Masukkan Type Nyeri Dada (0 = typical angina, 1 = atypical angina, 2 = non-anginal pain, 3 = asymtomatic)", min_value=0, max_value=3)
-  blood_pressure = st.number_input("Masukkan Tekanan Darah (mm/Hg) (94 - 200)", min_value=94.0, max_value=200.0)
-  cholestoral = st.number_input("Masukkan Kadar Kolesterol (mm/dl) (126 - 564)", min_value=126.0, max_value=564.0)
-  heart_rate = st.number_input("Masukkan Detak Jantung Maximal (71 - 202)", min_value=71.0, max_value=202.0)
+  blood_pressure = st.number_input("Masukkan Tekanan Darah (mm/Hg) (94 - 200)", min_value=94, max_value=200)
+  cholestoral = st.number_input("Masukkan Kadar Kolesterol (mm/dl) (126 - 564)", min_value=126, max_value=564)
+  heart_rate = st.number_input("Masukkan Detak Jantung Maximal (71 - 202)", min_value=71, max_value=202)
   oldpeak = st.number_input("Masukkan Oldpeak (0 - 6.2)", min_value=0.0, max_value=6.2)
 
   st.write("Cek apakah pasien mengidap serangan jantung atau tidak")
