@@ -18,8 +18,6 @@ import altair as alt
 from streamlit_option_menu import option_menu
 from sklearn.metrics import accuracy_score
 
-from process import implementasi 
-from process import model
 
 st.title("Heart Attack Analysis & Prediction Apps")
 st.write("Yoga Tirta Permana | 200411100125")
@@ -32,8 +30,10 @@ selected = option_menu(
 )
 
 df_train = pd.read_csv("data/heart.csv")
+y = df_train['output']
 
 
+# View Data
 if(selected == "View Data"):
     st.write("# View Data")
     view_data, info_data = st.tabs(["View Data","Info Data"])
@@ -45,7 +45,7 @@ if(selected == "View Data"):
             Fitur:
             - age: Umur dari pasien
             - gender: Jenis kelamin pasien
-            - chest_pain: Tipe rasa sakit yang dirasakan pada dada pasien
+            - chest_pain: Tipe nyeri dada pasien
                 > 1 - typical angina
                 > 2 - atypical angina
                 > 3 - non-anginal pain
@@ -61,8 +61,8 @@ if(selected == "View Data"):
 
     with info_data:
         st.write("## Informasi Dataset :")
-        st.success(f"Jumlah Data : {df_train.shape[0]} data")
-        st.success(f"Jumlah Fitur : {df_train.shape[1]} fitur")
+        st.info(f"Jumlah Data : {df_train.shape[0]} data")
+        st.info(f"Jumlah Fitur : {df_train.shape[1]} fitur")
         tipe_data   = df_train.dtypes
         data_max    = df_train.max()
         data_min    = df_train.min()
@@ -73,7 +73,7 @@ if(selected == "View Data"):
         st.write("#### Nilai data kosong",data_kosong)
 
 
-########################################## Preprocessing #####################################################
+# Preprocessing
 elif(selected == 'Preprocessing'):
   st.write("# Preprocessing")
   data_asli, normalisasi = st.tabs(["View Data","Normalisasi"])
@@ -92,30 +92,78 @@ elif(selected == 'Preprocessing'):
   joblib.dump(df_train_pre, 'model/df_train_pre.sav')
   joblib.dump(scaler,'model/df_scaled.sav')
 
-########################################### Modeling ##########################################################
+
+# Modelling
 elif(selected == 'Modelling'):
   st.write("# Modelling")
   #st.caption("Splitting Data yang digunakan merupakan 70:30, 30\% untuk data test dan 70\% untuk data train\nIterasi K di lakukan sebanyak 20 Kali")
   knn, nb, dtc = st.tabs(['K-NN', 'Naive-Bayes', 'Decission Tree'])
   
   with knn:
-    model.knn()
+    # Preprocessing Min-Max Scaler
+    df_train_pre = joblib.load('model/df_train_pre.sav')
+    x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
+    scores = {}
+    for i in range(1, 20+1):
+        KN = KNeighborsClassifier(n_neighbors = i)
+        KN.fit(x_train, y_train)
+        y_pred = KN.predict(x_test)
+        scores[i] = accuracy_score(y_test, y_pred)
+        
+    best_k = max(scores, key=scores.get)
+    st.info(f"K Terbaik : {best_k} berada di Index : {best_k-1}, Akurasi yang dihasilkan K-NN = {max(scores.values())* 100}%")
+    st.write(df_train_pre)
+    
+    # Create Chart 
+    st.write('Dari proses pemodelan yang telah di lakukan menghasilkan grafik sebagai berikut')
+    accuration_k = np.array(list(scores.values()))
+    chart_data = pd.DataFrame(accuration_k, columns=['Score Akurasi'])
+    st.line_chart(chart_data)
+    
+    # Save Model
+    knn = KNeighborsClassifier(n_neighbors=best_k)
+    knn.fit(x_train, y_train)
+    joblib.dump(knn, 'model/knn_model.sav') # Menyimpan Model ke dalam folder model
   
   with nb:
-    model.nb()
+    df_train_pre = joblib.load('model/df_train_pre.sav')
+    x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
+    
+    nb = GaussianNB()
+    nb.fit(x_train, y_train)
+    # Save Model
+    joblib.dump(nb, 'model/nb_model.sav') # Menyimpan Model ke dalam folder model
+    
+    y_pred = nb.predict(x_test)
+    akurasi = accuracy_score(y_test,y_pred)
+    
+    st.info(f'Akurasi yang dihasilkan Naive-Bayes = {akurasi*100}%')
+    st.write(df_train_pre)
 
   with dtc:
-    model.dtc()
+    df_train_pre = joblib.load('model/df_train_pre.sav')
+    x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
+    
+    dtc = DecisionTreeClassifier()
+    dtc.fit(x_train, y_train)
+    # Save Model
+    joblib.dump(dtc, 'model/dtc_model.sav') # Menyimpan Model ke dalam folder model
+    
+    y_pred = dtc.predict(x_test)
+    akurasi = accuracy_score(y_test,y_pred)
+    
+    st.info(f'Akurasi yang dihasilkan Decision Tree = {akurasi*100}%')
+    st.write(df_train_pre)
 
 
-####################################### Implementasi ###########################################################
+# Implementasi
 elif(selected == 'Implementation'):
   st.write("# Implementation")
 
   nama_pasien = st.text_input("Masukkan Nama")
   age = st.number_input("Masukkan Umur (29 - 77)", min_value=29, max_value=77)
   gender = st.number_input("Masukkan Jenis Kelamin (1 = Pria, 0 = Wanita)", min_value=0, max_value=1)
-  chest_pain = st.number_input("Masukkan Type Chest Pain (0 = typical angina, 1 = atypical angina, 2 = non-anginal pain, 3 = asymtomatic)", min_value=0, max_value=3)
+  chest_pain = st.number_input("Masukkan Type Nyeri Dada (0 = typical angina, 1 = atypical angina, 2 = non-anginal pain, 3 = asymtomatic)", min_value=0, max_value=3)
   blood_pressure = st.number_input("Masukkan Tekanan Darah (mm/Hg) (94 - 200)", min_value=94.0, max_value=200.0)
   cholestoral = st.number_input("Masukkan Kadar Kolesterol (mm/dl) (126 - 564)", min_value=126.0, max_value=564.0)
   heart_rate = st.number_input("Masukkan Detak Jantung Maximal (71 - 202)", min_value=71.0, max_value=202.0)
