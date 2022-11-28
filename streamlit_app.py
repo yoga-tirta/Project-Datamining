@@ -19,11 +19,11 @@ from streamlit_option_menu import option_menu
 from sklearn.metrics import accuracy_score
 
 
-st.title("Heart Attack Analysis & Prediction Apps")
+st.title("Heart Attack Analysis & Prediction Application")
 st.write("Yoga Tirta Permana | 200411100125")
 # with st.sidebar:
 selected = option_menu(
-    menu_title  = "Menu Option",
+    menu_title  = None,
     options     = ["View Data","Preprocessing","Modelling","Implementation"],
     icons       = ["data","process","model","implemen"],
     orientation = "horizontal",
