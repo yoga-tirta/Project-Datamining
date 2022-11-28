@@ -101,8 +101,8 @@ elif(selected == 'Modelling'):
   #st.caption("Splitting Data yang digunakan merupakan 70:30, 30\% untuk data test dan 70\% untuk data train\nIterasi K di lakukan sebanyak 20 Kali")
   knn, nb, dtc = st.tabs(['K-NN', 'Naive-Bayes', 'Decission Tree'])
   
+  # K-Nearest Neighbour
   with knn:
-    # Preprocessing Min-Max Scaler
     df_train_pre = joblib.load('model/df_train_pre.sav')
     x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
     scores = {}
@@ -123,11 +123,13 @@ elif(selected == 'Modelling'):
     chart_data = pd.DataFrame(accuration_k, columns=['Akurasi'])
     st.line_chart(chart_data)
     
-    # Save Model
     knn = KNeighborsClassifier(n_neighbors=best_k)
     knn.fit(x_train, y_train)
+
+    # Save Model
     joblib.dump(knn, 'model/knn_model.sav') # Menyimpan Model ke dalam folder model
   
+  # Naive-Bayes Gaussian
   with nb:
     df_train_pre = joblib.load('model/df_train_pre.sav')
     x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
@@ -144,6 +146,7 @@ elif(selected == 'Modelling'):
     st.info(f'Akurasi yang dihasilkan Naive-Bayes = {akurasi*100}%')
     st.write(df_train_pre)
 
+  # Decision Tree Classifier
   with dtc:
     df_train_pre = joblib.load('model/df_train_pre.sav')
     x_train, x_test, y_train, y_test = train_test_split(df_train_pre, y, test_size = 0.3, random_state = 0)
@@ -164,6 +167,7 @@ elif(selected == 'Modelling'):
 # Implementasi
 elif(selected == 'Implementation'):
   st.write("# Implementation")
+  st.write("Implementasi menggunakan Model K-NN dengan akurasi tertinggi sebesar 80.2%")
 
   nama_pasien = st.text_input("Masukkan Nama")
   age = st.number_input("Masukkan Umur (29 - 77)", min_value=29, max_value=77)
