@@ -29,7 +29,7 @@ selected = option_menu(
     orientation = "horizontal",
 )
 
-df_train = pd.read_csv("data/heart.csv")
+df_train = pd.read_csv("heart.csv")
 y = df_train['output']
 
 
@@ -41,36 +41,38 @@ if(selected == "View Data"):
     with view_data:
         st.write("## Menampilkan Dataset :")
         st.dataframe(df_train)
-        st.text("""
-            Fitur:
-            - age: Umur dari pasien
-            - gender: Jenis kelamin pasien
-            - chest_pain: Tipe nyeri dada pasien
-                > 0 - typical angina
-                > 1 - atypical angina
-                > 2 - non-anginal pain
-                > 3 - asymtomatic
-            - blood_pressure: Tekanan darah pasien (mm/Hg)
-            - cholestoral: Kadar kolesterol pasien (mm/dl)
-            - heart_rate: Detak jantung maximal pasien
-            - oldpeak: Tingkat depresi pasien
-            - output: Hasil
-                > 1 - True
-                > 0 - False
-            """)
+        st.write("""
+                  ### Fitur:
+                  - age: Umur dari pasien
+                  - gender: Jenis kelamin pasien
+                  - chest_pain: Tipe nyeri dada pasien
+                    > 0 - typical angina : Ketidaknyamanan pada dada dengan durasi tertentu
+
+                    > 1 - atypical angina : Rasa sakit yang dipicu oleh aktifitas fisik berlebihan atau stres emosional
+
+                    > 2 - non-anginal pain : Rasa sakit biasa yang bisa diredakan dengan istirahat
+
+                    > 3 - asymtomatic : Tidak ada gejala
+                  - blood_pressure: Tekanan darah pasien (mm/Hg) *
+                  - cholestoral: Kadar kolesterol pasien (mm/dl) *
+                  - heart_rate: Detak jantung maksimal pasien *
+                  - oldpeak: Tingkat depresi pasien *
+                  - output: Hasil
+                    > 1 - True
+
+                    > 0 - False
+                """)
+        st.error(f"Note : *Informasi bisa didapatkan melalui pemeriksaan dokter")
 
     with info_data:
         st.write("## Informasi Dataset :")
-        st.info(f"Jumlah Data : {df_train.shape[0]} data")
-        st.info(f"Jumlah Fitur : {df_train.shape[1]} fitur")
-        tipe_data   = df_train.dtypes
-        data_max    = df_train.max()
-        data_min    = df_train.min()
-        data_kosong = df_train.isnull().sum()
-        st.write("#### Tipe data",tipe_data)
-        st.write("#### Nilai maksimal data",round(data_max,2))
-        st.write("#### Nilai minimal data",data_min)
-        st.write("#### Nilai data kosong",data_kosong)
+        st.info(f"""
+                  - Jumlah Data : {df_train.shape[0]} data
+                  - Jumlah Fitur : {df_train.shape[1]} fitur
+                """)
+        st.write("#### Tipe data",df_train.dtypes)
+        st.write("#### Nilai maksimal data",df_train.max())
+        st.write("#### Nilai minimal data",df_train.min())
 
 
 # Preprocessing
