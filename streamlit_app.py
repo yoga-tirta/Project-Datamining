@@ -117,7 +117,7 @@ elif(selected == 'Modelling'):
     best_k = max(scores, key=scores.get)
     st.info(f"Akurasi yang dihasilkan K-NN = {max(scores.values())* 100}%")
     st.write(df_train_pre)
-    st.succes(f"K Terbaik : {best_k} berada di Index : {best_k-1}")
+    st.success(f"K Terbaik : {best_k} berada di Index : {best_k-1}")
     
     # Create Chart 
     st.write('Grafik Akurasi K')
