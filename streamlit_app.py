@@ -20,7 +20,7 @@ from sklearn.metrics import accuracy_score
 
 
 st.title("Heart Attack Analysis & Prediction Application")
-st.write("Yoga Tirta Permana | 200411100125")
+st.write("Yoga Tirta Permana | 200411100142")
 # with st.sidebar:
 selected = option_menu(
     menu_title  = None,
@@ -117,7 +117,7 @@ elif(selected == 'Modelling'):
     best_k = max(scores, key=scores.get)
     st.info(f"Akurasi yang dihasilkan K-NN = {max(scores.values())* 100}%")
     st.write(df_train_pre)
-    st.info(f"K Terbaik : {best_k} berada di Index : {best_k-1}")
+    st.succes(f"K Terbaik : {best_k} berada di Index : {best_k-1}")
     
     # Create Chart 
     st.write('Grafik Akurasi K')
