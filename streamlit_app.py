@@ -45,6 +45,9 @@ if(selected == "View Data"):
                   ### Fitur:
                   - age: Umur dari pasien
                   - gender: Jenis kelamin pasien
+                    > 1 - Pria
+
+                    > 0 - Wanita
                   - chest_pain: Tipe nyeri dada pasien
                     > 0 - typical angina : Ketidaknyamanan pada dada dengan durasi tertentu
 
