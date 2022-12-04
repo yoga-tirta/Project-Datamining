@@ -188,8 +188,7 @@ elif(selected == 'Implementation'):
   inputan = [[age, gender, chest_pain, blood_pressure, cholestoral, heart_rate, oldpeak]]
   
   scaler = joblib.load('model/df_scaled.sav')
-  scaler.fit(inputan)
-  data_scaler = scaler.fit_transform(inputan)
+  data_scaler = scaler.transform(inputan)
 
   FIRST_IDX = 0
   k_nn = joblib.load("model/knn_model.sav")
